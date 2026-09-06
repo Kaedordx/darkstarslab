@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --bg-void: #05060a;
+  --bg-hero: #05060d;
+  --bg-services: #0b0e17;
+  --bg-work: #05060a;
+  --bg-why: #030304;
+  --bg-closing: #030304;
+  --ink: #f4f2ec;
+  --ink-dim: #a8a9b3;
+  --accent: #d4a857;
+  --accent-rgb: 212, 168, 87;
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+}
+
+@theme inline {
+  --color-void: var(--bg-void);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-accent: var(--accent);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-void);
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--bg-void);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.35);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Lenis smooth-scroll wiring */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Utility: word/char reveal building blocks */
+.reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.reveal-word-inner {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.accent-glow {
+  box-shadow: 0 0 60px 8px rgba(var(--accent-rgb), 0.25);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
