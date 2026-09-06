@@ -1,32 +1,37 @@
 "use client";
 
 import TextReveal from "@/components/TextReveal";
-import { closing, contactEmail } from "@/lib/content";
+import Marquee from "@/components/Marquee";
+import { closing, contactEmail, ticker } from "@/lib/content";
 
 export default function Closing() {
   return (
     <section
       id="contact"
-      className="relative flex min-h-[90vh] flex-col justify-between border-t border-line bg-void px-6 py-28 md:px-12"
+      className="relative flex min-h-[90vh] flex-col justify-between bg-void"
     >
-      <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <TextReveal
-          as="h2"
-          text={closing.headline}
-          className="max-w-2xl font-display italic text-3xl font-normal leading-tight text-ink sm:text-4xl md:text-5xl"
-        />
+      <div className="flex flex-1 flex-col justify-center px-6 py-24 md:px-10">
+        <div className="max-w-4xl">
+          <TextReveal
+            as="h2"
+            text={closing.headline}
+            className="font-display text-4xl font-bold uppercase leading-[0.95] text-ink sm:text-5xl md:text-6xl"
+          />
 
-        <p className="mt-6 text-sm text-ink-dim">{contactEmail}</p>
+          <p className="mt-6 text-sm text-ink-dim">{contactEmail}</p>
 
-        <a
-          href={`mailto:${contactEmail}`}
-          className="mt-10 bg-accent px-8 py-3 text-sm text-black transition-opacity hover:opacity-90"
-        >
-          {closing.cta}
-        </a>
+          <a
+            href={`mailto:${contactEmail}`}
+            className="mt-10 inline-block bg-accent px-8 py-3.5 text-sm uppercase tracking-wide text-white transition-opacity hover:opacity-85"
+          >
+            {closing.cta}
+          </a>
+        </div>
       </div>
 
-      <footer className="mt-20 flex flex-col items-center justify-between gap-4 border-t border-line pt-8 text-xs text-ink-faint md:flex-row">
+      <Marquee items={ticker} />
+
+      <footer className="flex flex-col items-center justify-between gap-4 px-6 py-6 text-xs text-ink-faint md:flex-row md:px-10">
         <p>{closing.footerNote}</p>
         <div className="flex gap-6">
           {closing.footerLinks.map((link) => (

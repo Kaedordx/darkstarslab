@@ -19,9 +19,9 @@ const item: Variants = {
 
 export default function Why() {
   return (
-    <section className="relative border-t border-line px-6 py-28 md:px-12 md:py-36">
-      <div className="mx-auto max-w-4xl">
-        <p className="text-xs uppercase tracking-[0.3em] text-accent">
+    <section className="relative bg-accent px-6 py-24 text-white md:px-10 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <p className="text-xs uppercase tracking-[0.3em] text-white/70">
           {why.eyebrow}
         </p>
 
@@ -30,21 +30,17 @@ export default function Why() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={container}
-          className="mt-12"
+          className="mt-14 grid gap-14 md:grid-cols-3 md:gap-10"
         >
           {why.points.map((point) => (
-            <motion.div
-              key={point.number}
-              variants={item}
-              className="flex flex-col gap-2 border-t border-line py-8 last:border-b sm:flex-row sm:items-baseline sm:gap-10"
-            >
-              <span className="font-display text-lg text-accent sm:w-12 sm:shrink-0">
+            <motion.div key={point.number} variants={item}>
+              <span className="font-display text-5xl font-bold text-white/35 md:text-6xl">
                 {point.number}
               </span>
-              <h3 className="font-display text-xl text-ink sm:w-72 sm:shrink-0">
+              <h3 className="mt-5 font-display text-xl font-bold uppercase leading-tight text-white">
                 {point.title}
               </h3>
-              <p className="max-w-xl text-sm leading-relaxed text-ink-dim">
+              <p className="mt-3 text-sm leading-relaxed text-white/80">
                 {point.description}
               </p>
             </motion.div>

@@ -2,10 +2,19 @@
 // Edit copy, the accent color, or the contact placeholder here —
 // animation components read from this file and never hardcode text.
 
-export const accentColor = "#D4A857"; // warm gold — used for glows, buttons, numerals
-export const accentColorRgb = "212, 168, 87";
+export const accentColor = "#7C5CFF"; // electric violet — the one bold accent, used in solid blocks
+export const accentColorRgb = "124, 92, 255";
 
 export const contactEmail = "[REPLACE WITH REAL CONTACT EMAIL]";
+
+// Looping marquee band shown between scenes.
+export const ticker = [
+  "WEB DEVELOPMENT",
+  "BRAND IDENTITY",
+  "DIGITAL MARKETING",
+  "AI AUTOMATION",
+  "BUSINESS INFRASTRUCTURE",
+];
 
 export const nav = {
   wordmark: "DARKSTARS LAB",
@@ -55,6 +64,11 @@ export const work = {
   eyebrow: "Our Work",
   heading: "Every project, full stack.",
   subhead: "Design, build, and the marketing to back it.",
+  projects: [
+    { index: "01", tag: "Web + Brand", title: "Case Study 01" },
+    { index: "02", tag: "Marketing + AI", title: "Case Study 02" },
+    { index: "03", tag: "Full Stack", title: "Case Study 03" },
+  ],
 };
 
 export const why = {

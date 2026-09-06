@@ -6,21 +6,21 @@ import { nav } from "@/lib/content";
 export default function Nav() {
   return (
     <motion.header
-      initial={{ opacity: 0, y: -12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12"
+      initial={{ y: -60 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-line bg-void px-6 py-4 md:px-10"
     >
-      <a href="#top" className="text-xs tracking-[0.3em] text-ink">
-        {nav.wordmark}
+      <a href="#top" className="font-display text-sm font-bold tracking-tight text-ink">
+        DARKSTARS_
       </a>
 
-      <nav className="hidden items-center gap-10 md:flex">
+      <nav className="hidden items-center gap-8 md:flex">
         {nav.links.map((link) => (
           <a
             key={link.href}
             href={link.href}
-            className="text-sm text-ink-dim transition-colors hover:text-ink"
+            className="text-xs uppercase tracking-widest text-ink-dim transition-colors hover:text-ink"
           >
             {link.label}
           </a>
@@ -29,7 +29,7 @@ export default function Nav() {
 
       <a
         href="#contact"
-        className="border-b border-transparent text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+        className="bg-accent px-4 py-2 text-xs uppercase tracking-widest text-white transition-opacity hover:opacity-85"
       >
         {nav.cta}
       </a>

@@ -1,23 +1,22 @@
 # Darkstars Lab — Homepage
 
-A scroll-driven, editorial-dark homepage for **Darkstars Lab**, built as a single continuous
-scroll experience with five distinct "scenes" rather than stacked sections.
-
-The visual language is deliberately restrained: near-black background throughout, a warm
-muted-gold accent used sparingly (small numerals, one CTA, a hairline rule), an italic serif
-for headlines against a plain sans for body copy, and hairline-divided editorial rows instead
-of boxed cards. No WebGL — the "cinematic" feeling comes from typography, pacing, and scroll
-choreography (Lenis + GSAP ScrollTrigger + Framer Motion reveals), not 3D effects, which keeps
-every scene light on every device.
+A scroll-driven homepage for **Darkstars Lab** built as a single continuous scroll
+experience with five distinct "scenes." The visual language is a bold, graphic
+poster style — not the moody cinematic-serif look that's the obvious default for a
+"premium dark site": true black, one vivid violet accent used in solid blocks (not
+tinted text), heavy uppercase grotesk for headlines paired with mono type for
+everything else, a looping ticker marquee, and asymmetric left-aligned layouts
+instead of centered stacks. No WebGL anywhere — motion comes from Lenis + GSAP
+ScrollTrigger + Framer Motion, which keeps every scene light on every device.
 
 ## Stack
 
 - **Next.js 16 (App Router) + TypeScript**
 - **Tailwind CSS v4** for layout/utility styling
 - **Framer Motion** for text reveals and component-level animation
-- **GSAP + ScrollTrigger** for scroll-driven scene staging, the pinned "Our Work" scrub, and Lenis integration
+- **GSAP + ScrollTrigger** for scroll-driven scene staging, the Work scene's horizontal scroll-jack, and Lenis integration
 - **Lenis** for inertia-based smooth scrolling
-- `next/font` (Fraunces for italic serif display type, Inter for body copy)
+- `next/font` (Space Grotesk for bold display type, IBM Plex Mono for labels/body/nav)
 
 ## Getting started
 
@@ -39,44 +38,50 @@ npm run lint    # eslint
 app/
   layout.tsx          fonts, metadata, wraps the page in the Lenis smooth-scroll provider
   page.tsx             assembles the five scenes
-  globals.css          theme tokens (colors, fonts), grain texture, reduced-motion + Lenis wiring
+  globals.css          theme tokens (colors, fonts), marquee keyframes, reduced-motion + Lenis wiring
 components/
-  Nav.tsx               minimal nav, fades in after the hero's opening shot settles
+  Nav.tsx               structural nav (full-width border, not a floating pill)
+  Marquee.tsx           looping ticker band, used to bookend Hero and Closing
   TextReveal.tsx        word-by-word reveal (rise + blur-to-focus) used by every headline
-  Starfield.tsx         static, hand-authored dot field with a CSS twinkle — hero atmosphere with no WebGL/JS cost
   SmoothScrollProvider.tsx   Lenis + GSAP ScrollTrigger wiring, skipped under prefers-reduced-motion
   scenes/
-    Hero.tsx             Scene 1 — opening shot
-    Services.tsx         Scene 2 — "What we do" (editorial numbered rows)
-    Work.tsx              Scene 3 — pinned, scroll-scrubbed device mockups (the centerpiece)
-    Why.tsx               Scene 4 — "Why Darkstars" (numbered rows)
-    Closing.tsx           Scene 5 — closing shot + footer
+    Hero.tsx             Scene 1 — huge left-aligned uppercase headline, vertical rail label, marquee
+    Services.tsx         Scene 2 — hairline rows with oversized hollow numerals as background type
+    Work.tsx              Scene 3 — horizontal scroll-jacked project gallery (the centerpiece)
+    Why.tsx               Scene 4 — full color-inverted (solid accent) block, the scene's "mood cut"
+    Closing.tsx           Scene 5 — matches Hero's poster treatment + marquee bookend, footer
 lib/
-  content.ts             single source of truth: all copy, the accent color, and the contact placeholder
+  content.ts             single source of truth: all copy, project tile data, the accent color, contact placeholder
   useReducedMotion.ts     prefers-reduced-motion hook (SSR-safe via useSyncExternalStore)
 ```
 
-**To edit copy, the accent color, or CTA labels, edit `lib/content.ts` only** — no
-animation code needs to change.
+**To edit copy, the accent color, project tiles, or CTA labels, edit `lib/content.ts`
+only** — no animation code needs to change.
 
 ## Placeholders to replace before launch
 
 - **Contact email** — currently `[REPLACE WITH REAL CONTACT EMAIL]` in `lib/content.ts` (`contactEmail`), shown in the Closing scene.
-- **Project screenshots** — the Work scene's device mockups currently show abstract
-  placeholder UI blocks. They're marked with an HTML comment
+- **Project screenshots** — the Work scene's tiles currently show abstract placeholder
+  UI blocks. They're marked with an HTML comment
   (`REPLACE WITH REAL PROJECT SCREENSHOTS ONCE AVAILABLE`) in
-  `components/scenes/Work.tsx`, inside `DeviceMock`. Swap that component's placeholder
-  divs for real screenshots (`next/image`) once client work is available to show.
+  `components/scenes/Work.tsx`, inside `ProjectTile`. Swap that placeholder markup
+  for real screenshots (`next/image`) once client work is available to show.
+
+## How the Work scene works
+
+Scrolling into `#work` pins the section and converts vertical scroll into horizontal
+motion across the intro panel + project tiles (GSAP ScrollTrigger `scrub` driving a
+`transform: translateX` on the track, recomputed on resize via `invalidateOnRefresh`).
+On viewports under 768px the pin is skipped entirely — horizontal scroll-jacking is
+exactly the kind of pinned-scene fragility that breaks on mobile browsers — and the
+same track becomes a native horizontal scroll-snap strip instead.
 
 ## Mobile & performance notes
 
 - No WebGL/3D anywhere — the whole site is plain DOM + CSS transforms, animated only via
-  `transform`/`opacity`/`filter`, which is what actually keeps scroll smooth on mid-range phones.
-- The Work scene's pin is desktop-only (`gsap.matchMedia`, ≥768px); on mobile it becomes a
-  lighter scrub-without-pin reveal, since pinned sections are the most failure-prone thing on
-  small-viewport scroll.
-- Everything backs off under `prefers-reduced-motion` (Lenis smoothing is skipped entirely;
-  reveals shorten to a plain fade).
+  `transform`/`opacity`/`filter`.
+- The marquee is a single CSS `@keyframes` loop (no JS per-frame cost) and is paused
+  outright under `prefers-reduced-motion`, along with every other animation.
 
 ## Deploying
 

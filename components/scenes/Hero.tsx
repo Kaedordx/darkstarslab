@@ -1,102 +1,87 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import TextReveal from "@/components/TextReveal";
-import Starfield from "@/components/Starfield";
-import { hero } from "@/lib/content";
+import Marquee from "@/components/Marquee";
+import { hero, ticker } from "@/lib/content";
 import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 
 export default function Hero() {
   const reducedMotion = usePrefersReducedMotion();
-  const [showCue, setShowCue] = useState(true);
-
-  useEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY > 40) setShowCue(false);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const baseDelay = reducedMotion ? 0 : 500;
+  const baseDelay = reducedMotion ? 0 : 400;
 
   return (
     <section
       id="top"
-      className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden bg-void"
+      className="relative flex min-h-[100svh] w-full flex-col overflow-hidden bg-void pt-20"
     >
-      <Starfield />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-void to-transparent" />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-4 top-1/2 hidden origin-left -rotate-90 whitespace-nowrap text-xs uppercase tracking-[0.4em] text-ink-faint md:block"
+      >
+        South African Digital Studio
+      </span>
 
-      <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: baseDelay / 1000 }}
-          className="mb-6 text-xs uppercase tracking-[0.35em] text-accent"
-        >
-          Darkstars Lab
-        </motion.p>
-
-        <TextReveal
-          as="h1"
-          text={hero.headline}
-          delay={baseDelay + 150}
-          className="font-display text-4xl italic font-normal leading-[1.15] text-ink sm:text-5xl md:text-6xl"
-        />
-
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.7,
-            delay: (baseDelay + 750) / 1000,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="mt-6 max-w-xl text-base text-ink-dim sm:text-lg"
-        >
-          {hero.subhead}
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.7,
-            delay: (baseDelay + 950) / 1000,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="mt-10 flex flex-col items-center gap-5 sm:flex-row"
-        >
-          <a
-            href="#contact"
-            className="bg-accent px-8 py-3 text-sm text-black transition-opacity hover:opacity-90"
+      <div className="relative flex flex-1 items-center px-6 md:pl-24 md:pr-16">
+        <div className="max-w-5xl">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: baseDelay / 1000 }}
+            className="mb-6 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-accent"
           >
-            {hero.primaryCta}
-          </a>
-          <a
-            href="#services"
-            className="border-b border-ink/30 pb-0.5 text-sm text-ink-dim transition-colors hover:border-accent hover:text-ink"
+            <span className="inline-block h-2 w-2 bg-accent" />
+            Darkstars Lab
+          </motion.p>
+
+          <TextReveal
+            as="h1"
+            text={hero.headline}
+            delay={baseDelay + 100}
+            className="font-display text-[13vw] font-bold uppercase leading-[0.92] tracking-tight text-ink sm:text-[9vw] lg:text-[6.5vw]"
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: (baseDelay + 650) / 1000,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="mt-8 max-w-md text-sm leading-relaxed text-ink-dim sm:text-base"
           >
-            {hero.secondaryCta}
-          </a>
-        </motion.div>
+            {hero.subhead}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: (baseDelay + 850) / 1000,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="mt-10 flex flex-wrap items-center gap-4"
+          >
+            <a
+              href="#contact"
+              className="bg-accent px-7 py-3.5 text-sm uppercase tracking-wide text-white transition-opacity hover:opacity-85"
+            >
+              {hero.primaryCta}
+            </a>
+            <a
+              href="#services"
+              className="flex items-center gap-2 px-1 py-3.5 text-sm uppercase tracking-wide text-ink transition-colors hover:text-accent"
+            >
+              {hero.secondaryCta}
+              <span aria-hidden="true">→</span>
+            </a>
+          </motion.div>
+        </div>
       </div>
 
-      <motion.div
-        className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-xs uppercase tracking-[0.3em] text-ink-faint"
-        animate={{
-          opacity: showCue ? 1 : 0,
-          y: reducedMotion ? 0 : [0, 6, 0],
-        }}
-        transition={{
-          opacity: { duration: 0.4 },
-          y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" },
-        }}
-      >
-        {hero.scrollCue}
-      </motion.div>
+      <Marquee items={ticker} />
     </section>
   );
 }

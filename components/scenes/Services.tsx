@@ -15,7 +15,7 @@ export default function Services() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const rows = rowsRef.current.filter(Boolean);
-      gsap.set(rows, { y: 24, opacity: 0 });
+      gsap.set(rows, { opacity: 0, x: -30 });
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
@@ -23,11 +23,11 @@ export default function Services() {
         once: true,
         onEnter: () => {
           gsap.to(rows, {
-            y: 0,
             opacity: 1,
+            x: 0,
             duration: 0.8,
             ease: "power3.out",
-            stagger: 0.12,
+            stagger: 0.15,
           });
         },
       });
@@ -40,16 +40,16 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative border-t border-line px-6 py-28 md:px-12 md:py-36"
+      className="relative border-b border-line bg-void px-6 py-24 md:px-10 md:py-32"
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         <p className="text-xs uppercase tracking-[0.3em] text-accent">
           {services.eyebrow}
         </p>
         <TextReveal
           as="h2"
           text={services.heading}
-          className="mt-4 font-display italic text-3xl font-normal text-ink sm:text-4xl"
+          className="mt-4 font-display text-4xl font-bold uppercase leading-none text-ink sm:text-5xl"
         />
 
         <div className="mt-16">
@@ -59,17 +59,22 @@ export default function Services() {
               ref={(el) => {
                 rowsRef.current[i] = el;
               }}
-              className="flex flex-col gap-2 border-t border-line py-8 last:border-b sm:flex-row sm:items-baseline sm:gap-10"
+              className="relative overflow-hidden border-t border-line py-10 last:border-b md:py-14"
             >
-              <span className="font-display text-lg text-accent sm:w-12 sm:shrink-0">
+              <span
+                aria-hidden="true"
+                className="text-outline pointer-events-none absolute -right-2 top-1/2 hidden -translate-y-1/2 select-none font-display text-[9rem] font-bold leading-none md:block"
+              >
                 {card.number}
               </span>
-              <h3 className="font-display text-xl text-ink sm:w-72 sm:shrink-0">
-                {card.title}
-              </h3>
-              <p className="max-w-xl text-sm leading-relaxed text-ink-dim">
-                {card.description}
-              </p>
+              <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
+                <h3 className="font-display text-2xl font-bold uppercase leading-tight text-ink md:w-2/5 md:text-3xl">
+                  {card.title}
+                </h3>
+                <p className="max-w-md text-sm leading-relaxed text-ink-dim md:w-2/5">
+                  {card.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0a0b;
-  --ink: #f0eee7;
-  --ink-dim: #87868c;
-  --ink-faint: #57565c;
-  --line: rgba(240, 238, 231, 0.1);
-  --accent: #b68a54;
-  --accent-rgb: 182, 138, 84;
-  --font-display: var(--font-fraunces);
-  --font-body: var(--font-inter);
+  --bg: #000000;
+  --ink: #ffffff;
+  --ink-dim: #8a8a8a;
+  --ink-faint: #4a4a4a;
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #7c5cff;
+  --accent-ink: #ffffff;
+  --accent-rgb: 124, 92, 255;
+  --font-display: var(--font-grotesk);
+  --font-body: var(--font-mono);
 }
 
 @theme inline {
@@ -35,18 +36,18 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body), ui-monospace, monospace;
   overflow-x: hidden;
   overscroll-behavior-y: none;
 }
 
 ::selection {
-  background: rgba(var(--accent-rgb), 0.3);
-  color: var(--ink);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .font-display {
-  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Lenis smooth-scroll wiring */
@@ -86,26 +87,26 @@ html.lenis {
   border-color: var(--line);
 }
 
-/* A single, static grain layer standing in for the film texture the old
-   WebGL starfield tried (and failed cheaply) to deliver. No animation,
-   no JS, negligible paint cost. */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Hollow, outline-only numerals used as oversized background type. */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line);
 }
 
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.15;
+/* Continuous horizontal ticker band. Pure CSS transform loop — cheap,
+   and paused outright under prefers-reduced-motion below. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
   }
-  50% {
-    opacity: 0.8;
+  to {
+    transform: translateX(-50%);
   }
 }
 
