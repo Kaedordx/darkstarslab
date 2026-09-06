@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
 });
 
 const inter = Inter({
@@ -23,11 +24,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} h-full`}
-    >
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} h-full`}>
       <body className="min-h-full bg-void text-ink antialiased">
+        <div className="grain-overlay" aria-hidden="true" />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>

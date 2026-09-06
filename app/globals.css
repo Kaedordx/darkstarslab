@@ -1,24 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --bg-void: #05060a;
-  --bg-hero: #05060d;
-  --bg-services: #0b0e17;
-  --bg-work: #05060a;
-  --bg-why: #030304;
-  --bg-closing: #030304;
-  --ink: #f4f2ec;
-  --ink-dim: #a8a9b3;
-  --accent: #d4a857;
-  --accent-rgb: 212, 168, 87;
-  --font-display: var(--font-space-grotesk);
+  --bg: #0a0a0b;
+  --ink: #f0eee7;
+  --ink-dim: #87868c;
+  --ink-faint: #57565c;
+  --line: rgba(240, 238, 231, 0.1);
+  --accent: #b68a54;
+  --accent-rgb: 182, 138, 84;
+  --font-display: var(--font-fraunces);
   --font-body: var(--font-inter);
 }
 
 @theme inline {
-  --color-void: var(--bg-void);
+  --color-void: var(--bg);
   --color-ink: var(--ink);
   --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
   --color-accent: var(--accent);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -29,12 +28,12 @@
 }
 
 html {
-  background: var(--bg-void);
+  background: var(--bg);
   scroll-behavior: auto;
 }
 
 body {
-  background: var(--bg-void);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
@@ -42,12 +41,12 @@ body {
 }
 
 ::selection {
-  background: rgba(var(--accent-rgb), 0.35);
+  background: rgba(var(--accent-rgb), 0.3);
   color: var(--ink);
 }
 
 .font-display {
-  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display), ui-serif, Georgia, serif;
 }
 
 /* Lenis smooth-scroll wiring */
@@ -75,16 +74,39 @@ html.lenis {
   will-change: transform, opacity, filter;
 }
 
-.accent-glow {
-  box-shadow: 0 0 60px 8px rgba(var(--accent-rgb), 0.25);
-}
-
 .text-accent {
   color: var(--accent);
 }
 
 .bg-accent {
   background-color: var(--accent);
+}
+
+.border-line {
+  border-color: var(--line);
+}
+
+/* A single, static grain layer standing in for the film texture the old
+   WebGL starfield tried (and failed cheaply) to deliver. No animation,
+   no JS, negligible paint cost. */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

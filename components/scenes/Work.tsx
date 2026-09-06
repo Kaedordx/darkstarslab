@@ -1,112 +1,140 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TextReveal from "@/components/TextReveal";
-import SceneSeam from "@/components/SceneSeam";
 import { work } from "@/lib/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DeviceShowcaseScene = dynamic(
-  () => import("@/components/canvas/DeviceShowcaseScene"),
-  { ssr: false }
-);
+function DeviceMock({
+  variant,
+  className = "",
+}: {
+  variant: "browser" | "phone";
+  className?: string;
+}) {
+  return (
+    <div
+      className={`overflow-hidden rounded-lg border border-line bg-[#111113] ${className}`}
+    >
+      {variant === "browser" ? (
+        <div className="flex items-center gap-1.5 border-b border-line px-3 py-2.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-ink-faint" />
+          <span className="h-1.5 w-1.5 rounded-full bg-ink-faint" />
+          <span className="h-1.5 w-1.5 rounded-full bg-ink-faint" />
+        </div>
+      ) : (
+        <div className="flex justify-center border-b border-line py-2.5">
+          <span className="h-1 w-8 rounded-full bg-ink-faint" />
+        </div>
+      )}
+      {/* REPLACE WITH REAL PROJECT SCREENSHOTS ONCE AVAILABLE */}
+      <div className="flex flex-col gap-3 p-5">
+        <div className="h-1.5 w-2/5 rounded-full bg-accent/70" />
+        <div className="h-3 w-full rounded bg-white/[0.06]" />
+        <div className="h-3 w-4/5 rounded bg-white/[0.06]" />
+        <div className="h-3 w-full rounded bg-white/[0.06]" />
+        <div className="h-3 w-3/5 rounded bg-white/[0.06]" />
+      </div>
+    </div>
+  );
+}
 
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null);
-  const progressRef = useRef(0);
-  const [canvasVisible, setCanvasVisible] = useState(false);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const centerRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCanvasVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
 
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 768px)", () => {
-      const trigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "+=120%",
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          progressRef.current = self.progress;
-        },
+      mm.add("(min-width: 768px)", () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "+=100%",
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+        tl.fromTo(
+          leftRef.current,
+          { xPercent: -4, yPercent: 2 },
+          { xPercent: -16, yPercent: -8 },
+          0
+        )
+          .fromTo(
+            rightRef.current,
+            { xPercent: 4, yPercent: -2 },
+            { xPercent: 16, yPercent: 10 },
+            0
+          )
+          .fromTo(centerRef.current, { scale: 0.97 }, { scale: 1.05 }, 0);
       });
-      return () => trigger.kill();
-    });
 
-    mm.add("(max-width: 767px)", () => {
-      // Pinned scenes are the most fragile thing on mobile scroll (address-bar
-      // resize, momentum scroll) — trade the pin for a lighter scrub-only pass.
-      const trigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
-        scrub: 1,
-        onUpdate: (self) => {
-          progressRef.current = self.progress;
-        },
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(
+          [leftRef.current, centerRef.current, rightRef.current],
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 70%",
+            },
+          }
+        );
       });
-      return () => trigger.kill();
-    });
 
-    return () => mm.revert();
+      return () => mm.revert();
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       id="work"
       ref={sectionRef}
-      className="relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden bg-void px-6"
+      className="relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden border-t border-line bg-void px-6"
     >
-      <div className="absolute inset-0">
-        {canvasVisible && (
-          <Canvas
-            dpr={[1, 2]}
-            camera={{ position: [0, 0, 6], fov: 42 }}
-            gl={{ antialias: true }}
-          >
-            <color attach="background" args={["#05060a"]} />
-            <fog attach="fog" args={["#05060a", 6, 16]} />
-            <DeviceShowcaseScene progressRef={progressRef} />
-          </Canvas>
-        )}
-      </div>
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/60" />
-
-      <div className="relative z-10 mx-auto max-w-3xl text-center">
+      <div className="relative z-10 mx-auto mb-14 max-w-2xl text-center">
         <p className="text-xs uppercase tracking-[0.3em] text-accent">
           {work.eyebrow}
         </p>
         <TextReveal
           as="h2"
           text={work.heading}
-          className="mt-4 font-display text-3xl font-medium text-ink sm:text-4xl md:text-5xl"
+          className="mt-4 font-display italic text-3xl font-normal text-ink sm:text-4xl"
         />
         <p className="mt-4 text-base text-ink-dim">{work.subhead}</p>
       </div>
 
-      <SceneSeam toColor="#030304" />
+      <div className="relative h-[42vh] w-full max-w-4xl">
+        <div
+          ref={leftRef}
+          className="absolute left-[6%] top-[14%] w-[44%] sm:left-[10%]"
+        >
+          <DeviceMock variant="browser" />
+        </div>
+        <div
+          ref={centerRef}
+          className="absolute left-1/2 top-0 w-[52%] -translate-x-1/2"
+        >
+          <DeviceMock variant="browser" />
+        </div>
+        <div ref={rightRef} className="absolute right-[6%] top-[24%] w-[22%]">
+          <DeviceMock variant="phone" />
+        </div>
+      </div>
     </section>
   );
 }

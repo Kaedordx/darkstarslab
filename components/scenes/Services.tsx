@@ -4,33 +4,32 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TextReveal from "@/components/TextReveal";
-import SceneSeam from "@/components/SceneSeam";
 import { services } from "@/lib/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
+  const rowsRef = useRef<Array<HTMLDivElement | null>>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = cardsRef.current.filter(Boolean);
-      gsap.set(cards, { y: 60, opacity: 0 });
+      const rows = rowsRef.current.filter(Boolean);
+      gsap.set(rows, { y: 24, opacity: 0 });
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top 70%",
+        start: "top 75%",
+        once: true,
         onEnter: () => {
-          gsap.to(cards, {
+          gsap.to(rows, {
             y: 0,
             opacity: 1,
-            duration: 0.9,
+            duration: 0.8,
             ease: "power3.out",
-            stagger: 0.15,
+            stagger: 0.12,
           });
         },
-        once: true,
       });
     }, sectionRef);
 
@@ -41,42 +40,40 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#0b0e17] px-6 py-28 md:px-12 md:py-40"
+      className="relative border-t border-line px-6 py-28 md:px-12 md:py-36"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-4xl">
         <p className="text-xs uppercase tracking-[0.3em] text-accent">
           {services.eyebrow}
         </p>
         <TextReveal
           as="h2"
           text={services.heading}
-          className="mt-4 font-display text-3xl font-medium text-ink sm:text-4xl md:text-5xl"
+          className="mt-4 font-display italic text-3xl font-normal text-ink sm:text-4xl"
         />
 
-        <div className="mt-16 grid gap-6 md:grid-cols-3 md:gap-8">
+        <div className="mt-16">
           {services.cards.map((card, i) => (
             <div
               key={card.number}
               ref={(el) => {
-                cardsRef.current[i] = el;
+                rowsRef.current[i] = el;
               }}
-              className="rounded-2xl border border-ink/10 bg-white/[0.02] p-8 backdrop-blur-sm"
+              className="flex flex-col gap-2 border-t border-line py-8 last:border-b sm:flex-row sm:items-baseline sm:gap-10"
             >
-              <span className="font-display text-sm text-accent">
+              <span className="font-display text-lg text-accent sm:w-12 sm:shrink-0">
                 {card.number}
               </span>
-              <h3 className="mt-4 font-display text-xl text-ink">
+              <h3 className="font-display text-xl text-ink sm:w-72 sm:shrink-0">
                 {card.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-dim">
+              <p className="max-w-xl text-sm leading-relaxed text-ink-dim">
                 {card.description}
               </p>
             </div>
           ))}
         </div>
       </div>
-
-      <SceneSeam toColor="#05060a" />
     </section>
   );
 }
